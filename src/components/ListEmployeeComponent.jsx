@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import EmployeeService from '../services/EmployeeService'
 import { Button, Modal } from "antd";
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+
+
 
 class ListEmployeeComponent extends Component {
     constructor(props) {
@@ -80,6 +84,24 @@ class ListEmployeeComponent extends Component {
         this.props.history.push('/add-employee/_add');
     }
 
+    submit = (employeeid) => {
+        confirmAlert({
+          title: 'Confirm to submit',
+          message: 'Are you sure to do this.',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: () => {this.deleteEmployee(employeeid)}
+            },
+            {
+              label: 'No',
+              onClick: () => {}
+            }
+          ]
+        })
+      };
+
+
     render() {
         const empDetails = this.state.empDetails;
         return (
@@ -97,6 +119,8 @@ class ListEmployeeComponent extends Component {
                                     <th> Employee Last Name</th>
                                     <th> Employee Email Id</th>
                                     <th> Employee Phone Number</th>
+                                    <th> Employee Designation</th>
+                                    <th> Employee State</th>
                                     <th> Actions</th>
                                 </tr>
                             </thead>
@@ -109,10 +133,12 @@ class ListEmployeeComponent extends Component {
                                              <td> {employee.lastName}</td>
                                              <td> {employee.emailId}</td>
                                              <td> {employee.phoneNumber}</td>
+                                             <td> {employee.empDesignation}</td>
+                                             <td> {employee.empState}</td>
                                              <td>
                                                  <button onClick={ () => this.viewEmployee(employee.id)} title="View Employee" className="btn btn-sm btn-success"><i className="fa fa-eye"></i></button>
                                                  <button style={{marginLeft: "10px"}} title="Update Employee"  onClick={ () => this.editEmployee(employee.id)} className="btn btn-sm btn-info"><i className="fa fa-refresh" aria-hidden="true"></i></button>
-                                                 <button style={{marginLeft: "10px"}} title="Delete Employee" onClick={ () => this.deleteEmployee(employee.id)} className="btn btn-sm btn-danger"><i className="fa fa-trash"></i></button> 
+                                                 <button style={{marginLeft: "10px"}} title="Delete Employee" onClick={ () => {this.submit(employee.id) } } className="btn btn-sm btn-danger"><i className="fa fa-trash"></i></button> 
                                              </td>
                                         </tr>
                                     )
